@@ -1,6 +1,6 @@
 # Obsidian Open Terminal
 
-Minimal Obsidian desktop plugin that adds an **Open in terminal** item to the file explorer context menu.
+Minimal Obsidian plugin that adds an **Open in terminal** item to the file explorer context menu.
 
 GitHub: [spicyneuron/obsidian-open-terminal](https://github.com/spicyneuron/obsidian-open-terminal)
 
