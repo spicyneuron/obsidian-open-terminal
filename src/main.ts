@@ -58,17 +58,17 @@ export default class OpenInTerminalPlugin extends Plugin {
 			return;
 		}
 
-		const app = getTerminalApp(this.settings).trim();
-		if (!app) {
+		const terminalApp = getTerminalApp(this.settings).trim();
+		if (!terminalApp) {
 			new Notice("Set a terminal app in the plugin settings.");
 			return;
 		}
 
 		const dir = resolveTargetDir(adapter, file);
 
-		openTerminal(app, dir, (error) => {
+		openTerminal(terminalApp, dir, (error) => {
 			console.error("Open in terminal failed", error);
-			new Notice(`Could not open "${app}". Check the plugin settings.`);
+			new Notice(`Could not open "${terminalApp}". Check the plugin settings.`);
 		});
 	}
 }

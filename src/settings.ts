@@ -1,4 +1,4 @@
-import { App, Platform, PluginSettingTab, Setting } from "obsidian";
+import { App, Platform, PluginSettingTab, SettingGroup } from "obsidian";
 import type OpenInTerminalPlugin from "./main";
 
 export type PlatformKey = "darwin" | "win32" | "linux";
@@ -87,6 +87,17 @@ function getTerminalHint(): string {
 	}
 }
 
+function getLaunchHint(): string {
+	switch (getPlatform()) {
+		case "darwin":
+			return "Uses the system open command to launch the selected app in the target folder.";
+		case "win32":
+			return "Launches the configured terminal command with the target folder as the working directory.";
+		case "linux":
+			return "Launches the configured terminal command with the target folder as the working directory.";
+	}
+}
+
 export class OpenInTerminalSettingTab extends PluginSettingTab {
 	plugin: OpenInTerminalPlugin;
 
@@ -99,21 +110,25 @@ export class OpenInTerminalSettingTab extends PluginSettingTab {
 		const { containerEl } = this;
 		containerEl.empty();
 
-		new Setting(containerEl)
-			.setName(`Open in Terminal: ${getPlatformLabel()} Settings`)
-			.setHeading();
-
-		new Setting(containerEl)
-			.setName("Terminal app")
-			.setDesc(getTerminalHint())
-			.addText((text) =>
-				text
-					.setPlaceholder(getDefaultTerminal())
-					.setValue(getTerminalApp(this.plugin.settings))
-					.onChange(async (value) => {
-						setTerminalApp(this.plugin.settings, value);
-						await this.plugin.saveSettings();
-					}),
-			);
+		new SettingGroup(containerEl)
+			.addSetting((setting) => {
+				setting
+					.setName(`Detected platform: ${getPlatformLabel()}`)
+					.setDesc(getLaunchHint());
+			})
+			.addSetting((setting) => {
+				setting
+					.setName("Terminal app")
+					.setDesc(getTerminalHint())
+					.addText((text) =>
+						text
+							.setPlaceholder(getDefaultTerminal())
+							.setValue(getTerminalApp(this.plugin.settings))
+							.onChange(async (value) => {
+								setTerminalApp(this.plugin.settings, value);
+								await this.plugin.saveSettings();
+							}),
+					);
+			});
 	}
 }
